@@ -16,90 +16,55 @@
 
 <table style="text-align: center;" class="table table-striped table-hover table-bordered">
     <tr>
-        <td>프로그램이름</td>
+<%--        <td>프로그램이름</td>--%>
 <%--        <td>카테고리</td>--%>
 <%--        <td>지원OS</td>--%>
         <td>CPU</td>
         <td>VGA</td>
+<%--        <td>M/B</td>--%>
         <td>RAM</td>
-        <td>저장용량</td>
+        <td>Storage</td>
+<%--        <td>Power</td>--%>
     </tr>
 
 <%
-//    String em = null;
-    String p_name = null;
-    String p_category = null;
-    String p_os = null;
-    String p_cpu = null;
-    String p_vga = null;
-    Integer p_ram = null;
-    String p_ssd = null;
-//  Connection con= null;
     Statement st = null;
     ResultSet rs = null;
     request.setCharacterEncoding("UTF-8");
     String[] checked = request.getParameterValues("pcheck");
 
-//    Vector vp_name = new Vector();
-//    Vector vp_category = new Vector<>();
-//    Vector vp_os = new Vector();
-//    Vector vp_cpu = new Vector();
-//    Vector vp_vga = new Vector();
-//    Vector vp_ram = new Vector();
-//    Vector vp_ssd = new Vector();
-
-
     try {
+        st = null;
         st = con.createStatement();
-        st.executeUpdate("drop view if exits checkedview");
-        String sql = "create view checkedview as ";
-        sql +="select p_name, p_cpu, p_vga, p_ram, p_ssd ";
-        sql +="from Program ";
-        sql +="where " + checked[0] + " = p_name ";
-        for(int i = 1; i < checked.length; i++){
-            sql += " or " + checked[i] + " = p_name";
+        String view_sql = "create or replace view checkedview as " +
+                            "select p_cpu,  p_vga,  p_ram,  p_ssd " +
+                            "from Program ";
+        view_sql += "where p_name in (";
+        view_sql += "\'" + checked[0] + "\'";
+        for(int i = 1; i < checked.length; i++) {
+            view_sql += ",\'" + checked[i] + "\'";
         }
-        st.executeUpdate(sql);
-        String s_sql = "select * from checkedview";
-        rs = st.executeQuery(s_sql);
+        view_sql += ")";
+        st.executeUpdate(view_sql);
+
+        String sql = "select * from checkedview";
+        rs = st.executeQuery(sql);
 
         if (!(rs.next()))  {
             out.println("일치하는 프로그램이 없습니다.");
         } else {
-            do {
-                out.println("<tr>");
-                out.println("<td>" + rs.getString("p_name") + "</td>");
-                out.println("<td>" + rs.getString("p_cpu") + "</td>");
-                out.println("<td>" + rs.getString("p_vga") + "</td>");
-                out.println("<td>" + rs.getInt("p_ram") + "</td>");
-                out.println("<td>" + rs.getString("p_ssd") + "</td>");
-                out.println("</tr>");
-            }while(rs.next());
+                do {
+                    out.println("<tr>");
+                    out.println("<td>" + rs.getString("p_cpu") + "</td>");
+                    out.println("<td>" + rs.getString("p_vga") + "</td>");
+                    out.println("<td>" + rs.getInt("p_ram") + "</td>");
+                    out.println("<td>" + rs.getInt("p_ssd") + "</td>");
+                    out.println("</tr>");
+                }while(rs.next());
 
         rs.close();
     }
-//        else {
-//            do {
-//                p_name = rs.getString("p_name");
-//                p_category = rs.getString("p_category");
-//                p_os = rs.getString("p_os");
-//                p_cpu = rs.getString("p_cpu");
-//                p_vga = rs.getString("p_vga");
-//                p_ram = rs.getInt("p_ram");
-//                p_ssd = rs.getString("p_ssd");
-//                out.println("<tr>");
-//                out.println("<td>" + p_name + "</td>");
-//                out.println("<td>" + p_category + "</td>");
-//                out.println("<td>" + p_os + "</td>");
-//                out.println("<td>" + p_cpu + "</td>");
-//                out.println("<td>" + p_vga + "</td>");
-//                out.println("<td>" + p_ram + "</td>");
-//                out.println("<td>" + p_ssd + "</td>");
-//                out.println("</tr>");
-//            }while(rs.next());
-//
-//        rs.close();
-//    }
+
     out.println("</TABLE>");
     st.close();
     con.close();
@@ -108,14 +73,6 @@
     }
 
 
-
-//        vp_name.addElement(rs.getString("p_name"));
-//        vp_category.addElement(rs.getString("p_category"));
-//        vp_os.addElement(rs.getString("p_os"));
-//        vp_cpu.addElement(rs.getString("p_cpu"));
-//        vp_vga.addElement(rs.getString("p_vga"));
-//        vp_ram.addElement(new Integer(rs.getInt("p_ram")));
-//        vp_ssd.addElement(rs.getString("p_ssd"));
 %>
 
 <%--사양 테이블--%>
@@ -165,6 +122,7 @@
 <%--    </tr>--%>
 <%--    </tbody>--%>
 <%--</table>--%>
+
 
 <%--구매, 돌아가기 버튼--%>
 <div class="container">
