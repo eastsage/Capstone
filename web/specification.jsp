@@ -16,15 +16,12 @@
 
 <table style="text-align: center;" class="table table-striped table-hover table-bordered">
     <tr>
-<%--        <td>프로그램이름</td>--%>
-<%--        <td>카테고리</td>--%>
-<%--        <td>지원OS</td>--%>
         <td>CPU</td>
+        <td>M/B</td>
         <td>VGA</td>
-<%--        <td>M/B</td>--%>
         <td>RAM</td>
         <td>Storage</td>
-<%--        <td>Power</td>--%>
+        <td>Power</td>
     </tr>
 
 <%
@@ -36,34 +33,71 @@
     try {
         st = null;
         st = con.createStatement();
+
+        // check된 프로그램들의 view table을 대체하거나 생성산다
         String view_sql = "create or replace view checkedview as " +
-                            "select p_cpu,  p_vga,  p_ram,  p_ssd " +
+                            "select p_cpu ch_cpu,  p_vga ch_vga,  p_ram ch_ram,  p_ssd ch_ssd " +
                             "from Program ";
         view_sql += "where p_name in (";
-        view_sql += "\'" + checked[0] + "\'";
+        view_sql += "'" + checked[0] + "'";
         for(int i = 1; i < checked.length; i++) {
-            view_sql += ",\'" + checked[i] + "\'";
+            view_sql += ",'" + checked[i] + "'";
         }
         view_sql += ")";
         st.executeUpdate(view_sql);
 
-        String sql = "select * from checkedview";
-        rs = st.executeQuery(sql);
+        // 각각의 정보를 불러오는 SQL Query
+        String cpu_sql = "select ch_cpu, c_board, max(c_score) " +
+                            "from checkedview " +
+                            "inner join CPU on ch_cpu = c_name";
 
-        if (!(rs.next()))  {
-            out.println("일치하는 프로그램이 없습니다.");
-        } else {
-                do {
-                    out.println("<tr>");
-                    out.println("<td>" + rs.getString("p_cpu") + "</td>");
-                    out.println("<td>" + rs.getString("p_vga") + "</td>");
-                    out.println("<td>" + rs.getInt("p_ram") + "</td>");
-                    out.println("<td>" + rs.getInt("p_ssd") + "</td>");
-                    out.println("</tr>");
-                }while(rs.next());
+        // VGA가 null이면 '내장 그래픽' 출력
+        String vga_sql = "select distinct ifnull(ch_vga, \"내장 그래픽\") as ch_vga " +
+                            "from checkedview, VGA " +
+                            "group by v_name " +
+                            "having max(v_score)";
+
+        String ram_sql = "select max(ch_ram) as ch_ram " +
+                            "from checkedview ";
+
+        String ssd_sql = "select max(ch_ssd) as ch_ssd " +
+                            "from checkedview";
+
+        String power_sql = "select ch_vga, v_power, max(v_score) " +
+                            "from checkedview " +
+                            "inner join VGA on ch_vga = v_name";
+
+
+        //테이블에 쿼리에서 받은 정보들을 넣는다
+        out.println("<tr>");
+        rs = st.executeQuery(cpu_sql);
+        while (rs.next()) {
+            out.println("<td>" + rs.getString("ch_cpu") + "</td>");
+            out.println("<td>" + rs.getString("c_board") + "</td>");
+        }
+        rs = st.executeQuery(vga_sql);
+        while (rs.next())
+            out.println("<td>" + rs.getString("ch_vga") + "</td>");
+        rs = st.executeQuery(ram_sql);
+        while (rs.next())
+            out.println("<td>" + rs.getInt("ch_ram") + "GB</td>");
+        rs = st.executeQuery(ssd_sql);
+        while (rs.next())
+            out.println("<td>" + rs.getInt("ch_ssd") + "GB</td>");
+        rs = st.executeQuery(power_sql);
+
+        // VGA가 내장그래픽이면 '설명서 참조'를 출력
+        while (rs.next()) {
+            if (rs.getString("v_power") == null)
+                out.println("<td>설명서 참조</td>");
+            else
+            out.println("<td>" + rs.getString("v_power") + "W</td>");
+        }
+        out.println("</tr>");
+
 
         rs.close();
-    }
+
 
     out.println("</TABLE>");
     st.close();
@@ -72,56 +106,7 @@
     out.println(e);
     }
 
-
 %>
-
-<%--사양 테이블--%>
-<%--<table style="text-align: center;" class="table table-striped table-hover table-bordered">--%>
-<%--    <thead>--%>
-<%--    <tr>--%>
-<%--        <th>하드웨어</th>--%>
-<%--        <th>최소사양</th>--%>
-<%--        <th>권장사양</th>--%>
-<%--    </tr>--%>
-<%--    </thead>--%>
-<%--    <tbody>--%>
-<%--    <tr>--%>
-<%--        <td>OS</td>--%>
-<%--        <td>Windows 8</td>--%>
-<%--        <td>Windows 10</td>--%>
-<%--    </tr>--%>
-<%--    <tr class="cpu">--%>
-<%--        <td>CPU</td>--%>
-<%--        <td>CPU 2.0+GHz (SSE2 이상의 명령어가 지원되는)</td>--%>
-<%--        <td>3GHz</td>--%>
-<%--    </tr>--%>
-<%--    <tr class="ram">--%>
-<%--        <td>RAM</td>--%>
-<%--        <td>1GB (Windows Vista 또는 7 이용시 2GB)</td>--%>
-<%--        <td>4GB</td>--%>
-<%--    </tr>--%>
-<%--    <tr class="hd">--%>
-<%--        <td>HD/SSD</td>--%>
-<%--        <td>8GB</td>--%>
-<%--        <td>12GB</td>--%>
-<%--    </tr>--%>
-<%--    <tr class="mainboard">--%>
-<%--        <td>M/B</td>--%>
-<%--        <td>ㄴㄱㅁ</td>--%>
-<%--        <td>ㄴㄱㅁ</td>--%>
-<%--    </tr>--%>
-<%--    <tr class="graphic">--%>
-<%--        <td>Graphic</td>--%>
-<%--        <td>Shader 버전 2.0을 지원하는 그래픽 카드, DirectX 9.0을 지원하는 그래픽 카드</td>--%>
-<%--        <td>GeForce 8800 또는 동급 그래픽 카드 이상(512MB 이상 비디오 메모리, 전용 GPU가 적용된)</td>--%>
-<%--    </tr>--%>
-<%--    <tr class="power">--%>
-<%--        <td>Power</td>--%>
-<%--        <td>500W</td>--%>
-<%--        <td>9999KW</td>--%>
-<%--    </tr>--%>
-<%--    </tbody>--%>
-<%--</table>--%>
 
 
 <%--구매, 돌아가기 버튼--%>
@@ -129,12 +114,13 @@
     <div class="row justify-content-md-center">
         <div class="col col-lg-2">
             <p>
-                <a class="btn btn-lg btn-primary" href="#">Purchase</a>
+                <a class="btn btn-lg btn-primary" href="https://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16">
+                    Purchase</a>
             </p>
         </div>
         <div class="col col-lg-2">
             <p>
-                <a class="btn btn-lg btn-secondary" href="#">Return</a>
+                <a class="btn btn-lg btn-secondary" href="#" onclick="history.back()">Return</a>
             </p>
         </div>
     </div>
