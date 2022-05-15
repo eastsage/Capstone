@@ -18,11 +18,10 @@ select * from checkedview;
 
 desc checkedview;
 
-select distinct ch_cpu as CPU
-from checkedview,
-     CPU
-group by cpu.c_name
-having max(c_score);
+select ch_cpu, c_board, max(c_score)
+from checkedview
+         inner join CPU on ch_cpu = c_name;
+
 
 select distinct ch_vga as VGA
 from checkedview,
@@ -30,23 +29,26 @@ from checkedview,
 group by VGA.v_name
 having max(v_score);
 
-select concat(max(ch_ssd), 'GB') as storage
+select max(ch_ssd) as storage
 from checkedview;
 
-select concat(max(ch_ram), 'GB') as RAM
+select max(ch_ram) as RAM
 from checkedview;
 
-select distinct v_power as Power
+select distinct v_power
 from VGA,
      checkedview
-where v_name = (
-    select distinct ch_vga as VGA
+where ch_vga = (
+    select distinct ch_vga
     from checkedview,
          VGA
-    group by VGA.v_name
+    group by v_name
     having max(v_score)
 );
 
+select ch_vga, v_power, max(v_score)
+from checkedview
+         inner join VGA on ch_vga = v_name;
 
 
 
