@@ -37,30 +37,25 @@
 		      </style> 
 	          <ul class="navbar-nav me-auto mb-2">
 		          <li class="nav-item">
-		            <a class="nav-link active" aria-current="page" href="./main.jsp">Home</a>
+		            <a class="nav-link active" aria-current="page" href="./index.jsp">Home</a>
 		          </li>
 	          	  <li class="nav-item dropdown">
 	            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">친구야, 나만 믿어</a>
 	            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown01">
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Action</a></li>
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Another action</a></li>
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Something else here</a></li>
+	              <li><a class="dropdown-item" href="recommend.jsp" style="text-align: right">전공 선택</a></li>
+	              <li><a class="dropdown-item" href="program_list.jsp" style="text-align: right">사용프로그램 선택</a></li>
 	            </ul>
 	          </li>
 	          <li class="nav-item dropdown">
 	            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">친구야, 이건 알지?</a>
 	            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown01">
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Action</a></li>
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Another action</a></li>
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Something else here</a></li>
+	              <li><a class="dropdown-item" href="manual.jsp" style="text-align: right">페이지 설명 및 부품설명</a></li>
 	            </ul>
 	          </li>
 	          <li class="nav-item dropdown">
 	            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">친구야, 혹시 컴공...?</a>
 	            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown01">
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Action</a></li>
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Another action</a></li>
-	              <li><a class="dropdown-item" href="#" style="text-align: right">Something else here</a></li>
+	              <li><a class="dropdown-item" href="freeboard_list.jsp" style="text-align: right">커뮤니티 게시판</a></li>
 	            </ul>
 	          </li>
 	        </ul>

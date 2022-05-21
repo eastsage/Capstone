@@ -5,21 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
 <link href="./bootstrap-5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>로그인</title>
 </head>
 <body>
 <%@ include file="./navbar.jsp" %>
-	<div class="container">
+	<div class="container-fluid">
 		<style>
 		.jumbotron {
 			background-color: #ffffff; /*점보트론배경색*/
 		}
 		</style>
-			<div class="jumbotron">
-				<img src="./resources/images/logotext.png" class="img-rounded" alt="Cinque Terre" style="width: 100%" />
-			</div>
+		<div class="continer-fulid" style="text-align: center; justify-content: center;">
+			<a href="./main.jsp">
+				<img src="./resources/images/logotext.png" class="img-rounded" alt="Cinque Terre" style="width: 50%">
+			</a>
+		</div>
 	</div>
-	<div class="container" align="center">
+	<br>
+	<br>
+	<div class="container-fluid" align="center">
 		<div class="col-md-4 col-md-offset-4">
 			<h2 class="form-signin-heading">로그인</h2><p>
 			<%
@@ -46,6 +50,7 @@
 		<hr>
 		<a href="#"><u>비밀번호를 잊어버렸나요?</u></a>
 	</div>
+<%@ include file="footer.jsp" %>
 <script src="./bootstrap-5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

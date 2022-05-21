@@ -17,7 +17,7 @@
 	<!-- 이미지 -->
 		<div class="container-fulid" style="text-align: center; justify-content: center;">
 			<br>
-			<a href="./main.jsp">
+			<a href="index.jsp">
 				<img src="./resources/images/logotext.png" class="img-rounded" alt="Cinque Terre" style="width: 50%">
 			</a>
 		</div>

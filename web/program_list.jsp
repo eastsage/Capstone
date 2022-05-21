@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType = "text/html; charset=utf-8" %>
 <%@ page import="java.util.*" %>
 <!DOCTYPE html>
@@ -14,7 +13,6 @@
 <body>
 <%@ include file="dbconn.jsp" %>
 <%@ include file="./navbar.jsp" %>
-
 <div class="container-fluid" align="center">
 	<br>
 	<h2>ProgramList</h2>
@@ -42,7 +40,7 @@
 <br>
 <div class="container-fluid" style="width: 75%;">
 	<form action="specification.jsp" name="checkform" method="post">
-		<table class="table table-light" id="Program_Table" style="margin-left: auto; margin-right: auto; text-align: center;">
+		<table class="table table-hover table-light" id="Program_Table" style="margin-left: auto; margin-right: auto; text-align: center;">
 			<thead>
 					<tr>
 						<th style="width:5%; vertical-align : middle;"></th>
@@ -63,11 +61,10 @@
 					</tr>
 			</thead>
 			<tbody id="progtbody">
-
 			<%
 				request.setCharacterEncoding("UTF-8");
 				String major = request.getParameter("major");
-
+				
 				Statement st = null;
 				ResultSet rs = null;
 				st = con.createStatement();
@@ -81,7 +78,7 @@
 				while (rs.next()){
 					major_arr.add(rs.getString("m_prog"));
 				}
-
+				
 				PreparedStatement pstmt = null;
 				rs = null;
 				
@@ -93,14 +90,13 @@
 			%>
 				<tr>
 					<td><input type="checkbox" name="pcheck" value="<%=rs.getString("p_name")%>"
-<%--							arrList에 (?) 같은 값이 있다면 true반환--%>
-						<%
-							if (major_arr.contains(rs.getString("p_name"))) {
-								out.print(" checked");
-							}
-						%>
-						/>
-			</td>
+					<%--arrList에 (?) 같은 값이 있다면 true반환--%>
+					<%
+						if (major_arr.contains(rs.getString("p_name"))) {
+							out.print(" checked");
+						}
+					%>
+					/></td>
 					<td><img src="./resources/images/<%=rs.getString("p_name")%>.png" style="width: 30px; height: 30px;"></td>
 					<td><%=rs.getString("p_name")%></td>
 					<td><%=rs.getString("p_category")%></td>
@@ -118,10 +114,15 @@
 			%>
 			</tbody>
 		</table>
-	<br>
-		<button class="btn bg-dark text-white" type="submit" id="selectBtn" style="float: right;">선택완료 &raquo;</button>
+		<div>
+			<button class="btn bg-dark text-white" onclick="nocheck()" type="submit" id="selectBtn" style="float: right;">선택완료 &raquo;</button>
+		</div>
 	</form>
 </div>
+<p>
+<br>
+<br>
+<%@ include file="footer.jsp" %>
 <script>
 /* 검색 행 숨김 */
 function SearchFunction() {
@@ -167,24 +168,22 @@ for(i = 0; i < button.length; i++){
 		}
 	})
 }
-
-$("input[type='checkbox']").ready(function() {
-	var progArr = new Array();
-	var checkbox = $("input[name=pcheck]:checked");
-
-	// 체크된 체크박스 값을 가져온다
-	checkbox.each(function(i) {
-		var tr = checkbox.parent().parent().eq(i);
-		var td = tr.children();
-		var pname = td.eq(2).text() + ""; // td.eq(2)= 프로그램이름 행
-		progArr.push('<img src=\"./resources/images/'+ pname + '.png\" width=\"25\" height=\"25\">');
-	});
-	// 출력
-	document.getElementById('result').innerHTML
-			= progArr;
-});
-
 /* 체크박스 선택리스트 이미지 출력 */
+ $("input[type='checkbox']").ready(function() {
+		var progArr = new Array();
+		var checkbox = $("input[name=pcheck]:checked");
+
+		// 체크된 체크박스 값을 가져온다
+		checkbox.each(function(i) {
+			var tr = checkbox.parent().parent().eq(i);
+			var td = tr.children();	
+			var pname = td.eq(2).text() + ""; // td.eq(2)= 프로그램이름 행
+			progArr.push('<img src=\"./resources/images/'+ pname + '.png\" width=\"25\" height=\"25\">');
+		});
+		// 출력
+		document.getElementById('result').innerHTML
+				= progArr;
+	});
 $("input[type='checkbox']").change(function() {
 	var progArr = new Array();
 	var checkbox = $("input[name=pcheck]:checked");
@@ -200,6 +199,12 @@ $("input[type='checkbox']").change(function() {
 	document.getElementById('result').innerHTML
 			= progArr;
 });
+function nocheck() {
+	if ($("input:checkbox[name='pcheck']").is(":checked")==false) {
+		alert("최소 하나의 프로그램을 선택하세요.");
+		return;
+	}
+}
 </script>
 <script src="./bootstrap-5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

@@ -1,0 +1,28 @@
+/* CSS Document */
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	font-size:12px;
+	background-color:#000000;
+}
+
+.my-box { 
+border:4px;
+border-style:double none double none ;
+padding:5px; 
+color:black; 
+width : 750;
+display: block; 
+margin-right: auto;
+margin-left: auto;
+margin-top: 60px;
+}
+.style1 {font-size: 12px;color: #333333; font-weight:bold;}
+.style2 {font-size: 12px;color: #333333;}
+.input_style1 {border:1px solid #bbbbbb; width:200px; height:18px; font-size:12px; color:#000000;}
+.input_style2 {border:1px solid #bbbbbb; width:450px; height:18px; font-size:12px; color:#000000;}
+.textarea_style1 {border:1px solid #000000; width:450px; height:150px; font-size:12px; color:#333333;}
+.h3{background-color:gray;}
+
